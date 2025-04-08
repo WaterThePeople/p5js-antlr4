@@ -1,0 +1,88 @@
+import CustomLangVisitor from "../grammar/CustomLangVisitor.js";
+
+export default class CustomVisitor extends CustomLangVisitor {
+  constructor() {
+    super();
+    this.functionDefs = [];
+    this.topLevelCalls = [];
+  }
+
+  visit(ctx) {
+    if (!ctx) return null;
+    const name = ctx.constructor.name.replace("Context", "");
+    return super.visit(ctx);
+  }
+
+  visitProgram(ctx) {
+    const defs = ctx.def?.() ?? [];
+    for (const defCtx of defs) {
+      const func = this.visit(defCtx);
+      if (func) this.functionDefs.push(func);
+    }
+
+    const calls = ctx.call?.() ?? [];
+    for (const callCtx of calls) {
+      const call = this.visit(callCtx);
+      if (call) this.topLevelCalls.push(call);
+    }
+
+    return {
+      functions: this.functionDefs.join("\n\n"),
+      calls: this.topLevelCalls.map((c) => `  ${c}`).join("\n"),
+    };
+  }
+
+  visitDef(ctx) {
+    const funcName = ctx.ID().getText();
+    const calls = ctx.call?.() || [];
+
+    const body = calls.map((c) => `  ${this.visit(c)}`).join("\n");
+
+    return `function ${funcName}(x, y, len, rot) {
+  if (len < 0.05) return;
+  push();
+  translate(x * width, y * height);
+  rotate(rot);
+${body}
+  pop();
+}`;
+  }
+
+  visitCall(ctx) {
+    const funcName = ctx.ID().getText();
+    const x = this.visit(ctx.x_offset);
+    const y = this.visit(ctx.y_offset);
+    const len = this.visit(ctx.length);
+    const rot = this.visit(ctx.rotation);
+
+    return `${funcName}(${x}, ${y}, ${len}, ${rot});`;
+  }
+
+  visitMulExpr(ctx) {
+    const [left, right] = ctx.expr();
+    return `${this.visit(left)} * ${this.visit(right)}`;
+  }
+
+  visitAddExpr(ctx) {
+    const [left, right] = ctx.expr();
+    return `${this.visit(left)} ${ctx.op.text} ${this.visit(right)}`;
+  }
+
+  visitFloatVal(ctx) {
+    const sign = ctx.MINUS() ? "-" : "";
+    return sign + ctx.FLOAT().getText();
+  }
+
+  visitIntVal(ctx) {
+    const sign = ctx.MINUS() ? "-" : "";
+    return sign + ctx.INT().getText();
+  }
+
+  visitIdVal(ctx) {
+    return ctx.ID().getText();
+  }
+
+  visitNestedExpr(ctx) {
+    return `(${this.visit(ctx.expr())})`;
+  }
+}

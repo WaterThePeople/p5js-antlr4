@@ -1,0 +1,26 @@
+function setup() {
+  createCanvas(600, 600);
+  angleMode(DEGREES);
+  background(255);
+  translate(width / 2, height / 2);
+  rekurencyjny_kwadrat(0.5, 0.5, 0.9, 0);
+}
+
+function kwadrat(x, y, len, rot) {
+  push();
+  translate(x * width, y * height);
+  rotate(rot);
+  rectMode(CENTER);
+  rect(0, 0, len * width, len * height);
+  pop();
+}
+
+function rekurencyjny_kwadrat(x, y, len, rot) {
+  if (len < 0.05) return;
+  push();
+  translate(x * width, y * height);
+  rotate(rot);
+  kwadrat(0.0, 0.0, 1.0, 0);
+  rekurencyjny_kwadrat(-0.25, -0.25, 0.5, 0);
+  pop();
+}
