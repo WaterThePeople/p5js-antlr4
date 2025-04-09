@@ -43,7 +43,6 @@ export default class CustomVisitor extends CustomLangVisitor {
     return `function ${funcName}(x, y, len, rot) {
     if (len < 0.05) return;
     push();
-    translate(x * len, y * len);
     rotate(rot);
   ${body}
     pop();
@@ -66,12 +65,14 @@ export default class CustomVisitor extends CustomLangVisitor {
 
   visitMulExpr(ctx) {
     const [left, right] = ctx.expr();
-    return `${this.visit(left)} * ${this.visit(right)}`;
+    const op = ctx.op.text;
+    return `${this.visit(left)} ${op} ${this.visit(right)}`;
   }
 
   visitAddExpr(ctx) {
     const [left, right] = ctx.expr();
-    return `${this.visit(left)} ${ctx.op.text} ${this.visit(right)}`;
+    const op = ctx.op.text;
+    return `${this.visit(left)} ${op} ${this.visit(right)}`;
   }
 
   visitFloatVal(ctx) {

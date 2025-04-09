@@ -1,0 +1,13 @@
+rekurencja {
+  kwadrat(0,0,1,0)
+  rekurencja(-1/3, -1/3, 1/3, 0)
+  rekurencja(0, -1/3, 1/3, 0)
+  rekurencja(1/3, -1/3, 1/3, 0)
+  rekurencja(-1/3, 0, 1/3, 0)
+  rekurencja(1/3, 0, 1/3, 0)
+  rekurencja(-1/3, 1/3, 1/3, 0)
+  rekurencja(0, 1/3, 1/3, 0)
+  rekurencja(1/3, 1/3, 1/3, 0)
+}
+
+rekurencja(0,0,300,0)
