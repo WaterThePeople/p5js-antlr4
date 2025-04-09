@@ -1,7 +1,6 @@
-spiral_kwadrat {
-  kwadrat(0.0, 0.0, 1.0, 0)
-  spiral_kwadrat(0.5 * len, 0.5 * len, len * 0.5, 0)
+rekurencja {
+  kwadrat(0,0,1,0)
+  rekurencja(0,0,0.5,0)
 }
 
-spiral_kwadrat(-0.5, -0.5, 1.0, 0)
-
+rekurencja(0,0,300,0)

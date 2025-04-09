@@ -1,26 +1,38 @@
+
 function setup() {
   createCanvas(600, 600);
-  angleMode(DEGREES);
   background(255);
-  translate(width / 2, height / 2);
-  rekurencyjny_kwadrat(0.5, 0.5, 0.9, 0);
+    rekurencja(0, 0, 300, 0);
 }
 
 function kwadrat(x, y, len, rot) {
   push();
-  translate(x * width, y * height);
+  translate(x, y);
   rotate(rot);
-  rectMode(CENTER);
-  rect(0, 0, len * width, len * height);
+  fill(0,0,0,0);
+  rect(0, 0, len, len);
   pop();
 }
 
-function rekurencyjny_kwadrat(x, y, len, rot) {
-  if (len < 0.05) return;
+function trojkat(x, y, len, rot) {
   push();
-  translate(x * width, y * height);
+  translate(x, y);
   rotate(rot);
-  kwadrat(0.0, 0.0, 1.0, 0);
-  rekurencyjny_kwadrat(-0.25, -0.25, 0.5, 0);
+  fill(0,0,0,0);
+  triangle(
+    0, 0,
+    len / 2, -len * sqrt(3) / 2,
+    len, 0
+  );
   pop();
 }
+
+function rekurencja(x, y, len, rot) {
+    if (len < 0.05) return;
+    push();
+    translate(x * len, y * len);
+    rotate(rot);
+    kwadrat(x + 0 * len, y + 0 * len, len * 1, 0);
+  rekurencja(x + 0 * len, y + 0 * len, len * 0.5, 0);
+    pop();
+  }

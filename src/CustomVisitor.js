@@ -5,11 +5,11 @@ export default class CustomVisitor extends CustomLangVisitor {
     super();
     this.functionDefs = [];
     this.topLevelCalls = [];
+    this.inFunction = false;
   }
 
   visit(ctx) {
     if (!ctx) return null;
-    const name = ctx.constructor.name.replace("Context", "");
     return super.visit(ctx);
   }
 
@@ -36,16 +36,18 @@ export default class CustomVisitor extends CustomLangVisitor {
     const funcName = ctx.ID().getText();
     const calls = ctx.call?.() || [];
 
+    this.inFunction = true;
     const body = calls.map((c) => `  ${this.visit(c)}`).join("\n");
+    this.inFunction = false;
 
     return `function ${funcName}(x, y, len, rot) {
-  if (len < 0.05) return;
-  push();
-  translate(x * width, y * height);
-  rotate(rot);
-${body}
-  pop();
-}`;
+    if (len < 0.05) return;
+    push();
+    translate(x * len, y * len);
+    rotate(rot);
+  ${body}
+    pop();
+  }`;
   }
 
   visitCall(ctx) {
@@ -55,7 +57,11 @@ ${body}
     const len = this.visit(ctx.length);
     const rot = this.visit(ctx.rotation);
 
-    return `${funcName}(${x}, ${y}, ${len}, ${rot});`;
+    const xExpr = this.inFunction ? `x + ${x} * len` : x;
+    const yExpr = this.inFunction ? `y + ${y} * len` : y;
+    const lenExpr = this.inFunction ? `len * ${len}` : len;
+
+    return `${funcName}(${xExpr}, ${yExpr}, ${lenExpr}, ${rot});`;
   }
 
   visitMulExpr(ctx) {

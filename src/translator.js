@@ -6,10 +6,7 @@ import CustomVisitor from "./CustomVisitor.js";
 
 async function translateFile() {
   try {
-    const input = await fs.readFile(
-      "../text_files/recursive_square.txt",
-      "utf8"
-    );
+    const input = await fs.readFile("../text_files/input1.txt", "utf8");
 
     const chars = new antlr4.InputStream(input);
     const lexer = new CustomLangLexer(chars);
@@ -25,20 +22,32 @@ async function translateFile() {
     const calls = result?.calls ?? "";
     const functions = result?.functions ?? "";
 
-    const finalCode = `function setup() {
+    const finalCode = `
+function setup() {
   createCanvas(600, 600);
-  angleMode(DEGREES);
   background(255);
-  translate(width / 2, height / 2);
-${calls}
+  ${calls}
 }
 
 function kwadrat(x, y, len, rot) {
   push();
-  translate(x * width, y * height);
+  translate(x, y);
   rotate(rot);
-  rectMode(CENTER);
-  rect(0, 0, len * width, len * height);
+  fill(0,0,0,0);
+  rect(0, 0, len, len);
+  pop();
+}
+
+function trojkat(x, y, len, rot) {
+  push();
+  translate(x, y);
+  rotate(rot);
+  fill(0,0,0,0);
+  triangle(
+    0, 0,
+    len / 2, -len * sqrt(3) / 2,
+    len, 0
+  );
   pop();
 }
 
@@ -46,9 +55,9 @@ ${functions}
 `;
 
     await fs.writeFile("../text_files/output.txt", finalCode);
-    console.log("✅ Translation completed! See output.txt");
+    console.log("Translation completed. See output.txt");
   } catch (err) {
-    console.error("❌ Error during translation:", err);
+    console.error("Error during translation:", err);
   }
 }
 
