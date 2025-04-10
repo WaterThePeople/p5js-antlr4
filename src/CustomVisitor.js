@@ -41,7 +41,7 @@ export default class CustomVisitor extends CustomLangVisitor {
     this.inFunction = false;
 
     return `function ${funcName}(x, y, len, rot) {
-    if (len < 0.05) return;
+    if (len < 1) return;
     push();
     rotate(rot);
   ${body}
@@ -75,14 +75,21 @@ export default class CustomVisitor extends CustomLangVisitor {
     return `${this.visit(left)} ${op} ${this.visit(right)}`;
   }
 
+  visitMinusExpr(ctx) {
+    return `-${this.visit(ctx.expr())}`;
+  }
+
+  visitRootExpr(ctx) {
+    const inner = this.visit(ctx.expr());
+    return `Math.sqrt(${inner})`;
+  }
+
   visitFloatVal(ctx) {
-    const sign = ctx.MINUS() ? "-" : "";
-    return sign + ctx.FLOAT().getText();
+    return ctx.FLOAT().getText();
   }
 
   visitIntVal(ctx) {
-    const sign = ctx.MINUS() ? "-" : "";
-    return sign + ctx.INT().getText();
+    return ctx.INT().getText();
   }
 
   visitIdVal(ctx) {

@@ -13,12 +13,14 @@ call
                 rotation=expr RPAREN;
 
 expr
-    : expr op=(MUL | DIV) expr    # mulExpr
+    : MINUS expr                  # minusExpr
+    | expr op=(MUL | DIV) expr    # mulExpr
     | expr op=(PLUS | MINUS) expr # addExpr
-    | MINUS? FLOAT                # floatVal
-    | MINUS? INT                  # intVal
+    | 'root' LPAREN expr RPAREN   # rootExpr
+    | FLOAT                       # floatVal
+    | INT                         # intVal
     | ID                          # idVal
-    | LPAREN expr RPAREN         # nestedExpr
+    | LPAREN expr RPAREN          # nestedExpr
     ;
 
 COMMA  : ',';

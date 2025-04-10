@@ -24,6 +24,12 @@ export default class CustomLangVisitor extends antlr4.tree.ParseTreeVisitor {
 	}
 
 
+	// Visit a parse tree produced by CustomLangParser#rootExpr.
+	visitRootExpr(ctx) {
+	  return this.visitChildren(ctx);
+	}
+
+
 	// Visit a parse tree produced by CustomLangParser#idVal.
 	visitIdVal(ctx) {
 	  return this.visitChildren(ctx);
@@ -56,6 +62,12 @@ export default class CustomLangVisitor extends antlr4.tree.ParseTreeVisitor {
 
 	// Visit a parse tree produced by CustomLangParser#floatVal.
 	visitFloatVal(ctx) {
+	  return this.visitChildren(ctx);
+	}
+
+
+	// Visit a parse tree produced by CustomLangParser#minusExpr.
+	visitMinusExpr(ctx) {
 	  return this.visitChildren(ctx);
 	}
 
