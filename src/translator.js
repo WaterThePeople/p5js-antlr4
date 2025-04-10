@@ -6,7 +6,7 @@ import CustomVisitor from "./CustomVisitor.js";
 
 async function translateFile() {
   try {
-    const input = await fs.readFile("../text_files/trojkat_sierpinskiego.txt", "utf8");
+    const input = await fs.readFile("../text_files/input1.txt", "utf8");
 
     const chars = new antlr4.InputStream(input);
     const lexer = new CustomLangLexer(chars);
@@ -25,6 +25,7 @@ async function translateFile() {
     const finalCode = `
 function setup() {
   createCanvas(600, 600);
+  angleMode(DEGREES);
   background(225);
   translate(300,300);
   ${calls}

@@ -1,6 +1,6 @@
 rekurencja {
-  kwadrat(0.25,0.25,1,0)
-  rekurencja(0,0,0.5,0)
+  trojkat(0,0,1,0)
+  rekurencja(root(3)/6,root(3)/6,1/3,0)
 }
 
 rekurencja(0,0,300,0)
