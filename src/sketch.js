@@ -1,26 +1,42 @@
-let userInput, runButton;
 
 function setup() {
-  let canvas = createCanvas(600, 600);
-  canvas.parent(document.body);
-  background(220);
-
-  userInput = createElement('textarea');
-  userInput.parent('editor-container');
-
-  runButton = createButton('Run Code');
-  runButton.mousePressed(runUserCode);
-  runButton.parent('editor-container');
+  createCanvas(600, 600);
+  angleMode(DEGREES);
+  background(225);
+  translate(300,300);
+    rekurencja(0, 0, 200, 0);
 }
 
-function runUserCode() {
-  background(220);
-  let code = userInput.value();
-  try {
-    eval(code);
-  } catch (err) {
-    console.error('Error in your code:', err);
-    fill(255, 0, 0);
-    text('⚠️ Error in your code (check console)', 10, height - 10);
+function kwadrat(x, y, len, rot) {
+  push();
+  translate(x, y);
+  rotate(rot);
+  fill(0, 0, 0, 0);
+  rect(-len / 2, -len / 2, len, len);
+  pop();
+}
+
+function trojkat(x, y, len, rot) {
+  const h = len * sqrt(3) / 2;
+  push();
+  translate(x, y);
+  rotate(rot);
+  fill(0, 0, 0, 0);
+  triangle(
+    -len / 2, h / 3,
+    0, -2 * h / 3,
+    len / 2, h / 3
+  );
+  pop();
+}
+
+function rekurencja(x, y, len, rot) {
+    if (len < 1) return;
+    push();
+    rotate(rot);
+    trojkat(x + 0 * len, y + 0 * len, len * 1, 0);
+  rekurencja(x + -0.5 * len, y + -Math.sqrt(3) / 6 * len, len * 0.5, 0);
+  rekurencja(x + 0.5 * len, y + -Math.sqrt(3) / 6 * len, len * 0.5, 0);
+  rekurencja(x + 0 * len, y + Math.sqrt(3) / 3 * len, len * 0.5, 0);
+    pop();
   }
-}

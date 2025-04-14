@@ -6,7 +6,10 @@ import CustomVisitor from "./CustomVisitor.js";
 
 async function translateFile() {
   try {
-    const input = await fs.readFile("../text_files/input1.txt", "utf8");
+    const input = await fs.readFile(
+      "../text_files/trojkat_sierpinskiego.txt",
+      "utf8"
+    );
 
     const chars = new antlr4.InputStream(input);
     const lexer = new CustomLangLexer(chars);
@@ -57,7 +60,7 @@ function trojkat(x, y, len, rot) {
 ${functions}
 `;
 
-    await fs.writeFile("../text_files/output.txt", finalCode);
+    await fs.writeFile("sketch.js", finalCode);
     console.log("Translation completed. See output.txt");
   } catch (err) {
     console.error("Error during translation:", err);
